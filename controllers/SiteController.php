@@ -2,15 +2,38 @@
 
 namespace Controllers;
 
-class SiteController
+use Application;
+use Controller;
+use Request;
+
+require_once __DIR__ . '/../core/Controller.php';
+require_once __DIR__ . '/../core/Request.php';
+
+
+class SiteController extends Controller
 {
-    public function home()
+    public function home(): void
     {
-        return 'Home Page';
+        $params = [
+            'name' => "the dibs"
+        ];
+        $this->render('home',$params);
     }
 
-    public function handleContact(): string
+    public function contact(): void
     {
+
+        Application::$app->router->renderView('contact');
+    }
+
+    public function handleContact(Request $request): string
+    {
+        $body = $request->getBody();
+        echo '<pre>';
+        var_dump($body);
+        echo '</pre>';
+        exit;
+
         return 'Handling the submitted data';
     }
 }
