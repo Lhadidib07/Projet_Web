@@ -129,7 +129,29 @@
             background-color: #f4f4f4;
             border-radius: 5px;
         }
+        .notification {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background-color: #007BFF;
+            color: white;
+            padding: 1rem;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
 
+        .notification.hidden {
+            transform: translateY(-20px);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .notification.visible {
+            transform: translateY(0);
+            opacity: 1;
+        }
 
     </style>
 </head>
@@ -142,7 +164,7 @@
             <li><a href="/about">About</a></li>
             <li><a href="/contact">Contact</a></li>
             <?php if(isset($_SESSION['user_id'])): ?>
-                <li><a href="/logout">Logout</a></li>
+                <li><a ONCLICK=logout()>Logout</a></li>
                 <li><a href="/profile">Profile</a></li>
             <?php else : ?>
                 <li><a href="/login">Login</a></li>
@@ -160,13 +182,77 @@
 </header>
 
 <main style="justify-content: center; align-items: center; display: flex;  min-height: 94vh">
+    <?php if (isset($notification)): ?>
+        <div  <?= $notification['type']; ?>">
+
+            <?php echo $notification['message'];   htmlspecialchars($notification['message']); ?>
+            <?php $notification['message']; ?>
+        </div>
+    <?php endif; ?>
+    <div id="notification" class="notification hidden ">
+        <p id="notification-message">You have a new reply!</p>
+    </div>
    {{content}}
 </main>
+
 
 <script>
     function toggleMenu() {
         const navLinks = document.getElementById('navLinks');
         navLinks.classList.toggle('active');
+    }
+
+    function logout() {
+        fetch('/logout', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                csrf_token: <?= json_encode($_SESSION['csrf_token'] ?? '') ?>
+            })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Success:', data);
+                showNotification(data.message);
+                // Redirect to the login page or home page
+                setTimeout(() => {
+                    window.location.href = '/login';
+                }, 1500);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showNotification('An error occurred. Please try again later.');
+            });
+    }
+
+    function showNotification(message) {
+        const notification = document.getElementById('notification');
+        const messageElement = document.getElementById('notification-message');
+
+        // Mettre à jour le message
+        messageElement.textContent = message;
+
+        // Afficher la notification
+        notification.classList.remove('hidden');
+        notification.classList.add('visible');
+
+        // Masquer automatiquement après 5 secondes (optionnel)
+        setTimeout(() => {
+            hideNotification();
+        }, 5000);
+    }
+
+    function hideNotification() {
+        const notification = document.getElementById('notification');
+        notification.classList.remove('visible');
+        notification.classList.add('hidden');
     }
 </script>
 </body>

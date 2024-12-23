@@ -4,6 +4,7 @@ namespace Controllers;
 
 use Application;
 use Controller;
+use http\Env\Response;
 use models\User;
 use Request;
 
@@ -18,13 +19,52 @@ class AuthController extends Controller
         $this->render('login');
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
-        // Destroy the session
-        session_unset();
-        session_destroy();
+        try {
+            // Verify the validity of the CSRF token
+            if (hash_equals($_SESSION['csrf_token'], $request->getBody()['csrf_token'] ?? '')) {
+                // Header to indicate that the response is JSON
+                header('Content-Type: application/json');
 
-        return $this->render('home'); // Redirect to the home page or any other page
+                // Return a clean JSON response
+                echo json_encode([
+                    'status' => 'error',
+                    'message' => 'Invalid CSRF token',
+                ]);
+
+                // End the script to avoid any additional output
+                exit;
+            } else {
+                // Destroy the session
+                session_unset();
+                session_destroy();
+
+                // Header to indicate that the response is JSON
+                header('Content-Type: application/json');
+
+                // Return a clean JSON response
+                echo json_encode([
+                    'status' => 'success',
+                    'message' => 'Logout successful',
+                ]);
+
+                // End the script to avoid any additional output
+                exit;
+            }
+        } catch (\Exception $e) {
+            // Header to indicate that the response is JSON
+            header('Content-Type: application/json');
+
+            // Return a clean JSON response in case of error
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'An unexpected error occurred: ' . $e->getMessage(),
+            ]);
+
+            // End the script to avoid any additional output
+            exit;
+        }
     }
     public function handlelogin(Request $request)
     {

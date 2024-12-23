@@ -75,7 +75,6 @@ class Router
     {
         $path = $this->request->get_path();
         $method = $this->request->method();
-
         $callback = $this->routes[$method][$path] ?? null;
 
         if (!$callback) {
@@ -86,6 +85,7 @@ class Router
             }
 
         }
+
 
         $this->executeCallback($callback);
     }
@@ -98,7 +98,7 @@ class Router
         if (is_array($callback)) {
             $callback[0] = new $callback[0]();
         }
-        return call_user_func($callback, $this->request);
+        return call_user_func($callback, $this->request, $this->response);
     }
 
     public function renderView($view,$prams = [])

@@ -46,9 +46,9 @@ class Request
     }
 
 
-    function validateCsrfToken($token): bool
+    function validateCsrfToken($token)
     {
-        return $token === $_SESSION['csrf_token'];
+
     }
    public function getBody()
     {

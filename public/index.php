@@ -1,5 +1,7 @@
 <?php
 
+use Controllers\AuthController;
+
 require_once __DIR__ .'/../core/Application.php';
 require_once __DIR__ .'/../controllers/SiteController.php';
 require_once __DIR__ .'/../controllers/AuthController.php';
@@ -37,12 +39,11 @@ $app->router->get('/playGrid/{id}', [Controllers\GridController::class, 'playGri
 
 // a remplacé par un midlware qui redirige vers la page de conexion si l'utilisateur n'est pas connecté
 if(isset($_SESSION['user_id'])){
-    $app->router->get('/logout', [AuthController::class, 'logout']);
+    $app->router->post('/logout', [AuthController::class, 'logout']);
 
     $app->router->get('/grid/create', [Controllers\GridController::class, 'getForm']);
     $app->router->post('/grid/create', [Controllers\GridController::class, 'HandelCreate']);
 
-    $app->router->get('/logout', [Controllers\AuthController::class, 'logout']);
     $app->router->get('/profile', [Controllers\AuthController::class, 'profile']);
     $app->router->post('/profile', [Controllers\AuthController::class, 'updateProfile']);
 
