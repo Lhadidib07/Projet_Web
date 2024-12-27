@@ -1,6 +1,7 @@
 <?php
 
 namespace Controllers;
+use Exception;
 use Models\grid;
 use Controller;
 use Request;
@@ -45,24 +46,67 @@ class GridController extends Controller
         $gridRepository = new Grid();
         return $this->render('grid/create', ['model' => $gridRepository]);
     }
-    public function HandelCreate(Request $request)
+
+    public function handleCreate(): void
     {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            http_response_code(405);
+            echo json_encode(['message' => 'Method not allowed']);
+            return;
+        }
+
+        $input = file_get_contents('php://input');
+        $data = json_decode($input, true);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            http_response_code(400);
+            echo json_encode(['message' => 'Invalid JSON format']);
+            return;
+        }
+
+        if (!isset($data['csrf_token']) || $data['csrf_token'] !== ($_SESSION['csrf_token'] ?? '')) {
+            http_response_code(403);
+            echo json_encode(['message' => 'Invalid CSRF token']);
+            return;
+        }
+
+        $title = $data['title'] ?? null;
+        $description = $data['description'] ?? null;
+        $row_size = $data['row_size'] ?? null;
+        $col_size = $data['col_size'] ?? null;
+        $gridData = $data['gridData'] ?? null;
+
+        if (!$title || !$description || !$row_size || !$col_size || !$gridData) {
+            http_response_code(403);
+            echo json_encode(['message' => 'All fields are required']);
+            return;
+        }
+
+        // Create a new grid
         $gridRepository = new Grid();
-        $gridRepository->loadData($request->getBody());
-        // validation csrf
-        if (!hash_equals($_SESSION['csrf_token'], $request->getBody()['csrf_token'])) {
-            return $this->render('grid/create', ['model' => $gridRepository]);
-        }else{
-            if($gridRepository->validate() && $gridRepository->create()){
-                // a voir apres pour les notifs
-                $_SESSION['success'] = 'Grille ajoutée avec succès';
-                return $this->render('grids');
-            }
-            exit;
+        $gridRepository->user_id = $_SESSION['user_id'];
+        $gridRepository->title = $title;
+        $gridRepository->description = $description;
+        $gridRepository->row_size = $row_size;
+        $gridRepository->col_size = $col_size;
+        $gridRepository->grid_data = $gridData;
+
+        if($gridRepository->user_id == null || $gridRepository->title == null || $gridRepository->description == null || $gridRepository->row_size == null || $gridRepository->col_size == null || $gridRepository->grid_data == null){
+            http_response_code(200);
+            echo json_encode(['message' => 'tous les champs sont requis']);
+            return;
+        }
+
+        try {
+           $gridRepository->create();
+           echo json_encode(['message' => 'Grid created successfully']);
+        } catch (Exception $e) {
+            http_response_code(200);
+            echo json_encode(['message' => $e->getMessage()]);
         }
     }
 
-    public function delete()
+        public function delete()
     {
         echo 'delete';
     }

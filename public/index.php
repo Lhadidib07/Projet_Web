@@ -37,15 +37,15 @@ $app->router->get('/grids', [Controllers\GridController::class, 'getGrids']);
 $app->router->get('/grids/{id}', [Controllers\GridController::class, 'getGrid']);
 $app->router->get('/playGrid/{id}', [Controllers\GridController::class, 'playGrid']);
 
+
 // a remplacé par un midlware qui redirige vers la page de conexion si l'utilisateur n'est pas connecté
 if(isset($_SESSION['user_id'])){
     $app->router->post('/logout', [AuthController::class, 'logout']);
-
-    $app->router->get('/grid/create', [Controllers\GridController::class, 'getForm']);
-    $app->router->post('/grid/create', [Controllers\GridController::class, 'HandelCreate']);
-
     $app->router->get('/profile', [Controllers\AuthController::class, 'profile']);
     $app->router->post('/profile', [Controllers\AuthController::class, 'updateProfile']);
+
+    $app->router->get('/grid/create', [Controllers\GridController::class, 'getForm']);
+    $app->router->post('/grid/create', [Controllers\GridController::class, 'handleCreate']);
 
     if($_SESSION['user_role']=='admin'){
         $app->router->post('/grids/delete', [Controllers\GridController::class, 'delete']);
