@@ -172,7 +172,6 @@ if (isset($grid)) {
         </div>
         <div>
             <button onclick="checkGrid()">Check Grid</button>
-            <button onclick="saveGrid()">Save Grid</button>
         </div>
     </div>
 
@@ -224,15 +223,5 @@ if (isset($grid)) {
     }
 
 
-    function saveGrid(){
-        const gridItems = document.querySelectorAll('.grid-item');
-        let gridData = [];
-        gridItems.forEach((gridItem) => {
-            const input = gridItem.querySelector('input');
-            if (input) {
-                gridData.push(input.value);
-            }
-        });
-        console.log(gridData);
-    }
+
 </script>

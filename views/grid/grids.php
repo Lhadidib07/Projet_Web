@@ -1,14 +1,5 @@
 <style>
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #f9f9f9;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
-    }
+
 
     .grid-container {
         width: 80%;
@@ -93,4 +84,10 @@
             </div>
         </div>
     <?php endforeach; ?>
+
+    <?php if(isset($_SESSION['user_id'])): ?>
+        <div class="grid-item">
+            <a href="/grid/create" class="btn">Créer une grille</a>
+        </div>
+    <?php endif; ?>
 </div>

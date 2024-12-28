@@ -161,7 +161,7 @@
     <nav class="nav-links" id="navLinks">
         <ul>
             <li><a href="/">Home</a></li>
-            <li><a href="/about">About</a></li>
+            <li><a href="/grids">grilles</a></li>
             <li><a href="/contact">Contact</a></li>
             <?php if(isset($_SESSION['user_id'])): ?>
                 <li><a ONCLICK=logout()>Logout</a></li>
