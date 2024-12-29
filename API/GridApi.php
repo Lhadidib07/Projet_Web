@@ -10,7 +10,7 @@ class GridApi
 
     public function __construct()
     {
-        $this->db = \Application::$app->db;
+        $this->db = Application::$app->db;
     }
     // Récupérer toutes les grilles
     public function getGrids()

@@ -7,7 +7,7 @@ use API\UserApi;
 
 require_once __DIR__ . '/../core/Model.php';
 require_once __DIR__ . '/../core/Database.php';
-require_once __DIR__ . '/../API/UserApi.php';
+require_once __DIR__ . '/../api/UserApi.php';
 
 class User extends Model
 {
