@@ -64,4 +64,9 @@ class Grid extends Model
             echo json_encode(['message' => $e->getMessage()]);
         }
     }
+
+    function deleteById($id)        
+    {
+        return $this->gridApi->deleteGrid($id);
+    }
 }

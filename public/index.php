@@ -48,7 +48,8 @@ if(isset($_SESSION['user_id'])){
     $app->router->post('/grid/create', [Controllers\GridController::class, 'handleCreate']);
 
     if($_SESSION['user_role']=='admin'){
-        $app->router->post('/grids/delete', [Controllers\GridController::class, 'delete']);
+        
+        $app->router->post('/grids/delete', [Controllers\GridController::class, 'deleteGrid']);
         //$app->router->get('/users', [Controllers\UserController::class, 'index']);
         //$app->router->post('/users/delete', [Controllers\UserController::class, 'delete']);
     }

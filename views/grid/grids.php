@@ -72,7 +72,7 @@
         <h1>Liste des Grilles</h1>
     </div>
     <?php foreach ($grids as $grid): ?>
-        <div class="grid-item">
+        <div class="grid-item" id="grid-<?= $grid['id'] ?>" >
             <div>
                 <div class="grid-title"><?= htmlspecialchars($grid['title']) ?></div>
                 <div class="grid-description"><?= htmlspecialchars($grid['description']) ?></div>
@@ -81,6 +81,13 @@
                 <div class="grid-date">Créé le : <?= htmlspecialchars(date('d/m/Y', strtotime($grid['created_at']))) ?></div>
                 <a href="/grids/<?= $grid['id'] ?>" class="btn">Voir</a>
                 <a href="/playGrid/<?= $grid['id'] ?>" class="btn">Jouer</a>
+                <?php if(isset($_SESSION['user_id']) && $_SESSION['user_role'] === 'admin'): ?>
+                    <form id="deleteForm" action="/grids/delete" method="POST" style="display:inline;" onsubmit="submitForm(event)">
+                        <input type="hidden" name="id" value="<?= $grid['id'] ?>">
+                        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
+                        <button type="submit" class="btn" style="background-color: #f44336;">Supprimer</button>
+                    </form>
+                <?php endif; ?>
             </div>
         </div>
     <?php endforeach; ?>
@@ -91,3 +98,56 @@
         </div>
     <?php endif; ?>
 </div>
+
+<script>
+
+    function submitForm(event) {
+        event.preventDefault(); // Empêche la soumission par défaut du formulaire
+
+        const form = event.target; // Récupère le formulaire à partir de l'événement
+        const formData = new FormData(form); // Crée un objet FormData avec les données du formulaire
+        const data = {}; // Initialise un objet vide pour stocker les données
+
+        // Itère sur chaque paire clé-valeur de FormData et les ajoute à l'objet data
+        formData.forEach((value, key) => {
+            data[key] = value;
+        });
+        console.log(data);
+        id = data.id;
+
+        fetch('/grids/delete', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                console.log(data);
+                deleteFromDom(data.id);
+                showNotification(data.message);
+            } else {
+                console.error(data);
+                deleteFromDom(id);
+                showNotification(data.message);
+            }
+        })
+        .catch(error => {
+            showNotification('Une erreur est survenue ici ');
+        });
+    }
+   
+
+
+    function deleteFromDom(id) {
+        console.log(`Suppression de l'élément avec l'ID: grid-${id}`); // Ajout d'une instruction de débogage
+        const gridItem = document.getElementById(`grid-${id}`);
+        if (gridItem) {
+            gridItem.remove();
+        } else {
+            console.error(`Élément avec l'ID grid-${id} non trouvé`); // Ajout d'une instruction de débogage
+        }
+    }
+</script>

@@ -105,11 +105,46 @@ class GridController extends Controller
             echo json_encode(['message' => $e->getMessage()]);
         }
     }
-
-        public function delete()
+    public function deleteGrid(Request $request): void
     {
-        echo 'delete';
+        header('Content-Type: application/json'); // Ensure the response is JSON
+    
+        $input = file_get_contents('php://input');
+        $data = json_decode($input, true);
+    
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            http_response_code(400);
+            echo json_encode(['message' => 'Invalid JSON format']);
+            return;
+        }
+    
+        if (!isset($data['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $data['csrf_token'])) {
+            http_response_code(403);
+            echo json_encode(['message' => 'Invalid CSRF token']);
+            return;
+        }
+    
+        $id = $data['id'] ?? null;
+    
+        if (!$id) {
+            http_response_code(400);
+            echo json_encode(['message' => 'ID field is required']);
+            return;
+        }
+    
+        // Debugging: Log the ID and CSRF token
+        error_log('ID: ' . $id);
+        error_log('CSRF Token: ' . $data['csrf_token']);
+    
+        $gridRepository = new Grid();
+        if ($gridRepository->deleteById($id)) {
+            echo json_encode(['message' => 'Grid deleted successfully']);
+        } else {
+            http_response_code(500);
+            echo json_encode(['message' => 'Failed to delete grid']);
+        }
     }
 
+    
 
 }

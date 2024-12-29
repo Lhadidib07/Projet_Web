@@ -17,7 +17,20 @@ class m01_initial
         ) ENGINE=INNODB;";
 
         $db->pdo->prepare($sql)->execute();
-        echo  "table users crée avec succès\n";
+
+         // Insérer un utilisateur avec le rôle d'administrateur
+         $username = 'admin';
+         $password = password_hash('admin_password', PASSWORD_BCRYPT); // Assurez-vous de hacher le mot de passe
+         $role = 'admin';
+ 
+         $sql = "INSERT INTO users (username, password, role) VALUES (:username, :password, :role)";
+         $stmt = $db->pdo->prepare($sql);
+         $stmt->bindParam(':username', $username);
+         $stmt->bindParam(':password', $password);
+         $stmt->bindParam(':role', $role);
+         $stmt->execute();
+
+        echo "Table users créée et utilisateur admin ajouté avec succès\n";
     }
 
     public function down()
