@@ -102,25 +102,25 @@
                 <!-- Titre de la grille -->
                 <div class="form-group">
                     <label for="title">Titre de la Grille <span class="error">*</span></label>
-                    <input type="text" id="title" name="title" placeholder="Ex: Grille Avancée" required>
+                    <input type="text" id="title" name="title" placeholder="Ex: Grille Avancée"  required >
                 </div>
 
                 <!-- Description -->
                 <div class="form-group">
                     <label for="description">Description <span class="error">*</span></label>
-                    <textarea id="description" name="description" placeholder="Décrivez votre grille" required></textarea>
+                    <textarea id="description" name="description" placeholder="Décrivez votre grille"  required></textarea>
                 </div>
 
                 <!-- Nombre de lignes -->
                 <div class="form-group">
                     <label for="row_size">Nombre de Lignes <span class="error">*</span></label>
-                    <input type="number" id="row_size" name="row_size" placeholder="Ex: 10" required min="1">
+                    <input type="number" id="row_size" name="row_size" placeholder="Ex: 8" required min="1" max="16">
                 </div>
 
                 <!-- Nombre de colonnes -->
                 <div class="form-group">
                     <label for="col_size">Nombre de Colonnes <span class="error">*</span></label>
-                    <input type="number" id="col_size" name="col_size" placeholder="Ex: 10" required min="1">
+                    <input type="number" id="col_size" name="col_size" placeholder="Ex: 8" required min="1" max="16">
                 </div>
 
                 <!-- Bouton pour passer à l'étape 2 -->
@@ -160,6 +160,8 @@
     </div>
 
 <script>
+   var rowsSize = 0;
+    var colsSize = 0;
     
     function showStep(step) {
         if (step === 2) {
@@ -172,6 +174,8 @@
     }
 
     function generateGrid(rows, cols) {
+        rowsSize = rows;
+        colsSize = cols;
         const gridContainer = document.getElementById('gridContainer');
         const rowCluesContainer = document.getElementById('rowCluesContainer');
         const colCluesContainer = document.getElementById('colCluesContainer');
@@ -181,13 +185,17 @@
         colCluesContainer.innerHTML = ''; // Clear previous column clues
 
         const table = document.createElement('table');
-        for (let i = 0; i < rows; i++) {
+               for (let i = 0; i < rows; i++) {
             const tr = document.createElement('tr');
             for (let j = 0; j < cols; j++) {
                 const td = document.createElement('td');
                 const input = document.createElement('input');
                 input.type = 'text';
                 input.name = `grid[${i}][${j}]`;
+                input.id = `cell-${i}-${j}`; // Ajout d'un attribut id unique
+                input.maxLength = 1;
+                input.style.textAlign = 'center';
+                input.addEventListener('keydown', handleKeyDown); // gestionnaire d'événements pour les touches de direction
                 td.appendChild(input);
                 tr.appendChild(td);
             }
@@ -348,4 +356,37 @@
     return true;
 }
     
+    function handleKeyDown(event) {
+        const id = event.target.id;
+        const [_, row, col] = id.split('-').map(Number);
+        console.log(row, col, event.key);
+    
+        function focusCell(newRow, newCol) {
+            document.getElementById(`cell-${newRow}-${newCol}`).focus();
+        }
+    
+        switch (event.key) {
+            case 'ArrowUp':
+                if (row > 0) {
+                    focusCell(row - 1, col);
+                }
+                break;
+            case 'ArrowDown':
+                if (row < rowsSize - 1) {
+                    focusCell(row + 1, col);
+                }
+                break;
+            case 'ArrowLeft':
+                if (col > 0) {
+                    focusCell(row, col - 1);
+                }
+                break;
+            case 'ArrowRight':
+                if (col < colsSize - 1) {
+                    focusCell(row, col + 1);
+                }
+                break;
+        }
+    }
+
 </script>
