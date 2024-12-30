@@ -108,7 +108,10 @@
 
             <div class="form-group">
                 <label for="email">Email</label>
-                <input class="is-invalid" type="email" id="email" name="email" placeholder="Entrez votre email" >
+                <input class="is-invalid" type="email" id="email" name="email" placeholder="Entrez votre email" value="<?= $model->email ?>" style="<?= $model->hasError('email') ? 'border-color: red;' : '' ?>">
+                <div style="color: red; margin-left: 15px">
+                    <?= $model->getFirstError('email') ? $model->getFirstError('email') : '' ?>
+                </div>
             </div>
             <div class="form-group">
                 <label for="password">Mot de passe</label>

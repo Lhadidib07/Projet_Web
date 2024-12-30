@@ -33,11 +33,11 @@ class User extends Model
         if ($user) {
             $this->role = $user['role'];
             $this->id = $user['id'];
-            echo 'Success login in model user';
-            return $user;
+            return true;
+        }else{
+            return false;
         }
-        echo ' faild login in model user ';
-        return false;
+    
     }
 
    public function register(): bool

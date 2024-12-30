@@ -27,10 +27,8 @@ class UserApi
 
     public function login($data)
     {
-        echo 'login in api';
         $email = $data['email'];
         $password = $data['password'];
-        var_dump($email, $password);
 
         $sql = "SELECT * FROM users WHERE email = :email";
         $req = $this->db->prepare($sql);
@@ -38,14 +36,13 @@ class UserApi
         $req->execute();
         $user = $req->fetch();
         // afficher les donéne de l'utilisateur pour le test
-         var_dump($user);
 
         if ($user && password_verify($password, $user['password'])) {
-            echo 'Success login in api';
             return $user;
+        }else{
+            return false;
         }
-        echo 'faild login in api';
-        return false;
+        
     }
 
     public function getUsers()

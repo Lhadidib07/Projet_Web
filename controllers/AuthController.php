@@ -75,7 +75,6 @@ class AuthController extends Controller
 
 
         if (!$userData->login()) {
-            echo ' Login failed in controller ';
             return $this->render('login', ['model' => $userData]);
         }
 
@@ -83,7 +82,6 @@ class AuthController extends Controller
         $_SESSION['user_role'] = $userData->role;
         $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 
-        echo 'Success';
         return $this->render('home'); // Redirect to the home page or any other page
     }
 
