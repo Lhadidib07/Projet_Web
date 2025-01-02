@@ -18,7 +18,6 @@ $app = new Application(dirname(__DIR__));
 
 //static routes
 $app->router->get('/',[Controllers\SiteController::class, 'home']);
-$app->router->get('/about', function() { return 'About Us'; });
 $app->router->get('/contact',[Controllers\SiteController::class, 'contact']);
 $app->router->post('/contact', [Controllers\SiteController::class, 'handleContact']);
 
@@ -41,17 +40,18 @@ $app->router->get('/playGrid/{id}', [Controllers\GridController::class, 'playGri
 // a remplacé par un midlware qui redirige vers la page de conexion si l'utilisateur n'est pas connecté
 if(isset($_SESSION['user_id'])){
     $app->router->post('/logout', [AuthController::class, 'logout']);
-    $app->router->get('/profile', [Controllers\AuthController::class, 'profile']);
-    $app->router->post('/profile', [Controllers\AuthController::class, 'updateProfile']);
 
-    $app->router->get('/grid/create', [Controllers\GridController::class, 'getForm']);
-    $app->router->post('/grid/create', [Controllers\GridController::class, 'handleCreate']);
-
+    if($_SESSION['user_role']!='admin'){
+        $app->router->get('/grid/create', [Controllers\GridController::class, 'getForm']);
+        $app->router->post('/grid/create', [Controllers\GridController::class, 'handleCreate']);
+    }
+    
     if($_SESSION['user_role']=='admin'){
-        
         $app->router->post('/grids/delete', [Controllers\GridController::class, 'deleteGrid']);
-        //$app->router->get('/users', [Controllers\UserController::class, 'index']);
-        //$app->router->post('/users/delete', [Controllers\UserController::class, 'delete']);
+
+        $app->router->get('/users', [Controllers\UserController::class, 'getUsers']);
+        $app->router->post('addUser', [Controllers\UserController::class, 'addUser']);
+        $app->router->post('/delteUser', [Controllers\UserController::class, 'deleteUser']);
     }
 
 }

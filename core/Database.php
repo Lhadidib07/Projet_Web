@@ -11,7 +11,6 @@ class Database
     // CONCATENATION DE LA CONSTANTE DSN AVEC LA CONSTANTE DB_NAME
     const DSN_DB = self::DSN . self::DB_NAME;
 
-    // Declare the $pdo property
     public PDO $pdo;
 
 

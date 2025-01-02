@@ -56,7 +56,7 @@ class GridController extends Controller
         }
 
         $input = file_get_contents('php://input');
-        $data = json_decode($input, true);
+        $data = json_decode($input, associative: true);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
             http_response_code(400);
@@ -98,8 +98,10 @@ class GridController extends Controller
         }
 
         try {
-           $gridRepository->create();
-           echo json_encode(['message' => 'Grid created successfully']);
+            if($gridRepository->validate()){ 
+                $gridRepository->create();
+                echo json_encode(['message' => 'Grid created successfully']);
+            }
         } catch (Exception $e) {
             http_response_code(200);
             echo json_encode(['message' => $e->getMessage()]);

@@ -14,10 +14,7 @@ class SiteController extends Controller
 {
     public function home(): void
     {
-        $params = [
-            'name' => "the dibs"
-        ];
-        $this->render('home',$params);
+        $this->render('home');
     }
 
     public function contact(): void
@@ -26,10 +23,10 @@ class SiteController extends Controller
         Application::$app->router->renderView('contact');
     }
 
-    public function handleContact(Request $request): string
+    public function handleContact(Request $request): void
     {
         $body = $request->getBody();
 
-        return 'Handling the submitted data';
+            
     }
 }

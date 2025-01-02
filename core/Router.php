@@ -7,6 +7,7 @@ class Router
     public Request $request;
     public Response $response;
     protected array $routes = [];
+
     function __construct (Request $request, Response $response)
     {
         $this->request = $request;
@@ -81,7 +82,7 @@ class Router
             $callback = $this->getCallback();
             if(!$callback){
                 $this->response->setStatusCode(404);
-                return $this->renderView("_404");
+                return $this->renderView("notFount.php");
             }
 
         }
@@ -89,7 +90,6 @@ class Router
 
         $this->executeCallback($callback);
     }
-
     private function executeCallback($callback)
     {
         if (is_string($callback)) {

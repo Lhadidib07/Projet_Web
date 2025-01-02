@@ -13,11 +13,6 @@ class Application
     public static Application $app;
     public Database $db;
 
-    protected array $middlewares = [];
-    public function addMiddleware($middleware): void
-    {
-        $this->middlewares[] = $middleware;
-    }
 
     public static  string $ROOT_DIR;
     public function __construct($routePath)

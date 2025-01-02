@@ -20,7 +20,7 @@ class UserApi
         $sql = "INSERT INTO users (name, email, password) VALUES (:name, :email, :password)";
         $req = $this->db->prepare($sql);
         $req->bindParam(':name', $name);
-        $req->bindParam(':email', $email);
+        $req->bindParam(param: ':email', $email);
         $req->bindParam(':password', $password);
         return $req->execute();
     }

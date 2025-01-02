@@ -51,6 +51,26 @@ class User extends Model
     return $userApi->addUser($data);
 }
 
+    public function getAllUsers()
+    {
+        $userApi = new UserApi();
+        return $userApi->getUsers();
+    }
+
+    public function deleteUser()
+    {
+        $userApi = new UserApi();
+        return $userApi->deleteUser($this->id);
+    }
+
+    public function getUserByMail()
+    {
+        $userApi = new UserApi();
+        return $userApi->getUserByMail($this->email);
+    }
+
+    
+
     public function rules(): array
     {
         return [

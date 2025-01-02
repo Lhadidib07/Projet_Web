@@ -79,7 +79,9 @@
             </div>
             <div style="text-align: right;">
                 <div class="grid-date">Créé le : <?= htmlspecialchars(date('d/m/Y', strtotime($grid['created_at']))) ?></div>
-                <a href="/playGrid/<?= $grid['id'] ?>" class="btn">Jouer</a>
+                <?php if ( isset($_SESSION['user_role']) !== 'admin') : ?>
+                    <a href="/playGrid/<?= $grid['id'] ?>" class="btn">Jouer</a>
+                <?php endif; ?> 
                 <?php if(isset($_SESSION['user_id']) && $_SESSION['user_role'] === 'admin'): ?>
                     <a href="/grids/<?= $grid['id'] ?>" class="btn">Voir</a>
                     <form id="deleteForm" action="/grids/delete" method="POST" style="display:inline;" onsubmit="submitForm(event)">
