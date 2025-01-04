@@ -22,7 +22,11 @@ class UserApi
         $req->bindParam(':name', $name);
         $req->bindParam(':email', $email);
         $req->bindParam(':password', $password);
-        return $req->execute();
+        if($req->execute()){
+            return true;
+        }else{  
+            return false;
+        }
     }
 
     public function login($data)
@@ -47,7 +51,7 @@ class UserApi
 
     public function getUsers()
     {
-        $sql = "SELECT * FROM users";
+        $sql = "SELECT * FROM users where role = 'user'";
         $req = $this->db->prepare($sql);
         $req->execute();
         $users = $req->fetchAll();

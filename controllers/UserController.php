@@ -31,21 +31,31 @@ class UserController extends Controller
 
     public function addUser(Request $request): void
     {
+       
         $this->csrfVerification($request);
 
         $userData = new User();
-        // il faut validé les données avant de les envoyer à la base de données
+        // Charger les données de la requête
         $userData->loadData($request->getBody());
-    
-        if ( $userData->validate() && $userData->register() ) {
-            unset($userData->password);
 
-            // get user data by email 
-            $userData = $userData->getUserByMail(); 
-            echo json_encode(['status' => 'success', 'user' => $userData , 'message' => 'User added successfully']);
-        }else{ 
-            echo json_encode(['status' => 'error', 'message' => 'Failed to add user' , 'errors' => $userData->getErrors()]);
+        // Vérifier si l'utilisateur existe déjà
+        if ($userData->getUserByMail($userData->email)) {
+            echo json_encode(['status' => 'error', 'message' => 'L\'utilisateur existe déjà']);
+            return;
         }
+
+        // Valider les données
+        if ($userData->validate() && $userData->register() ) {
+
+            unset($userData->password);
+            // Récupérer les données de l'utilisateur par email
+            $userData = $userData->getUserByMail($userData->email);
+            echo json_encode(['status' => 'success', 'user' => $userData, 'message' => 'Utilisateur ajouté avec succès']);
+            
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Données invalides', 'errors' => $userData->errors]);
+        }
+        
 
     }
   

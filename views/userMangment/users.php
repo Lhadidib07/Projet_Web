@@ -1,161 +1,4 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestion des utilisateurs</title>
-    <style>
-        /* Style général pour le tableau */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-            font-family: Arial, sans-serif;
-        }
-
-        /* Style pour les en-têtes de tableau */
-        th {
-            background-color: #4CAF50;
-            color: white;
-            padding: 12px;
-            text-align: left;
-        }
-
-        /* Style pour les cellules de tableau */
-        td {
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
-        }
-
-        tr > th {
-            text-align: center;
-        }
-
-        /* Style pour les lignes du tableau au survol */
-        tr:hover {
-            background-color: #f5f5f5;
-        }
-
-        /* Style pour le bouton "Ajouter un utilisateur" */
-        .btn {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            text-decoration: none;
-            border-radius: 5px;
-            display: inline-block;
-            margin-bottom: 20px;
-            cursor: pointer;
-            border: none;
-        }
-
-        .btn:hover {
-            background-color: #45a049;
-        }
-
-        /* Style pour le bouton "Supprimer" */
-        button[type="submit"] {
-            background-color: #f44336;
-            color: white;
-            padding: 5px 10px;
-            border: none;
-            border-radius: 3px;
-            cursor: pointer;
-        }
-
-        button[type="submit"]:hover {
-            background-color: #d32f2f;
-        }
-
-        /* Style pour les notifications */
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px;
-            border-radius: 5px;
-            color: white;
-            background-color: #4CAF50;
-            display: none;
-        }
-
-        .notification.error {
-            background-color: #f44336;
-        }
-
-        /* Animation pour les notifications */
-        @keyframes slideIn {
-            from {
-                transform: translateX(100%);
-            }
-            to {
-                transform: translateX(0);
-            }
-        }
-
-        .notification.show {
-            display: block;
-            animation: slideIn 0.5s ease-out;
-        }
-
-        /* Style pour le modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-content {
-            background-color: white;
-            padding: 20px;
-            border-radius: 5px;
-            width: 300px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        .modal-content .close {
-            float: right;
-            font-size: 24px;
-            cursor: pointer;
-        }
-
-        .modal-content form {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .modal-content label {
-            margin-bottom: 5px;
-        }
-
-        .modal-content input {
-            margin-bottom: 10px;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 3px;
-        }
-
-        .modal-content button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px;
-            border: none;
-            border-radius: 3px;
-            cursor: pointer;
-        }
-
-        .modal-content button:hover {
-            background-color: #45a049;
-        }
-    </style>
-</head>
-<body>
+<link rel="stylesheet" href="/css/userManagement.css">
     <div style="width:100%">
         <div class="grid-item">
             <button class="btn" onclick="openModal()">Ajouter un utilisateur</button>
@@ -216,7 +59,6 @@
             xhr.onload = function() {
                 if (xhr.status === 200) {
                     const response = JSON.parse(xhr.responseText);
-                    console.log(response);
                     if (response.status === 'success') {
                         showNotification(response.message);
                         deleteFromDom(response.id);
@@ -287,7 +129,8 @@
                     }
 
                 } else {
-                    showNotification('Une erreur est survenue', 'error');
+                    closeModal();
+                    showNotification('Une erreur est survenue');
                 }
             };
             xhr.send(formData);
@@ -301,5 +144,3 @@
             }
         };
     </script>
-</body>
-</html>

@@ -23,7 +23,6 @@
             <li><a href="/grids">grilles</a></li>
             <?php if(isset($_SESSION['user_id'])): ?>
                 <li><a ONCLICK=logout()>Logout</a></li>
-                <li><a href="/profile">Profile</a></li>
             <?php else : ?>
                 <li><a href="/login">Login</a></li>
                 <li><a href="/register">Register</a></li>
