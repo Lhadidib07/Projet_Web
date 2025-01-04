@@ -82,7 +82,7 @@ class Router
             $callback = $this->getCallback();
             if(!$callback){
                 $this->response->setStatusCode(404);
-                return $this->renderView("notFount.php");
+                return $this->renderView("notFound");
             }
 
         }

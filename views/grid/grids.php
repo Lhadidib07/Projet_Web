@@ -94,7 +94,7 @@
         </div>
     <?php endforeach; ?>
 
-    <?php if(isset($_SESSION['user_id'])): ?>
+    <?php if(isset($_SESSION['user_id'])  && $_SESSION['user_role'] !== 'admin'): ?>
         <div class="grid-item">
             <a href="/grid/create" class="btn">Créer une grille</a>
         </div>

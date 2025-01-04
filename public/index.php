@@ -6,6 +6,7 @@ require_once __DIR__ .'/../core/Application.php';
 require_once __DIR__ .'/../controllers/SiteController.php';
 require_once __DIR__ .'/../controllers/AuthController.php';
 require_once __DIR__ . '/../controllers/GridController.php'; // Include the GridController
+require_once __DIR__ . '/../controllers/UserController.php'; // Include the UserController
 
 session_start([
     'cookie_lifetime' => 86400, // 1 day
@@ -47,11 +48,11 @@ if(isset($_SESSION['user_id'])){
     }
     
     if($_SESSION['user_role']=='admin'){
+        $app->router->get('/users', callback: [Controllers\UserController::class, 'getUsers']);
         $app->router->post('/grids/delete', [Controllers\GridController::class, 'deleteGrid']);
-
-        $app->router->get('/users', [Controllers\UserController::class, 'getUsers']);
-        $app->router->post('addUser', [Controllers\UserController::class, 'addUser']);
-        $app->router->post('/delteUser', [Controllers\UserController::class, 'deleteUser']);
+        $app->router->post('/addUser', [Controllers\UserController::class, 'addUser']);
+        
+        $app->router->post('/deleteUser', [Controllers\UserController::class, 'deleteUser']);
     }
 
 }
