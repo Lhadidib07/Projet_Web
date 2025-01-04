@@ -11,16 +11,14 @@
 </head>
 <body >
 <header class="navbar">
-    <div class="logo">MyLogo</div>
+    <div class="logo">los Gridos</div>
     <nav class="nav-links" id="navLinks">
         <ul>
             <li><a href="/">Home</a></li>
             <?php if(isset($_SESSION['user_id']) && $_SESSION['user_role'] === 'admin'): ?>
                 <li><a href="/users">Utilisateurs</a></li>
-            <?php else: ?>
-                 <li><a href="/contact">Contact</a></li>
             <?php endif; ?>
-            <li><a href="/grids">grilles</a></li>
+            <li><a href="/grids">Grilles</a></li>
             <?php if(isset($_SESSION['user_id'])): ?>
                 <li><a ONCLICK=logout()>Logout</a></li>
             <?php else : ?>
