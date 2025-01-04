@@ -64,7 +64,6 @@ class Router
                     $values[] = $valueMatches[$i][0];
                 }
                 $routeParams = array_combine($routeNames, $values);
-                var_dump($routeParams);
                 $this->request->setRouteParams($routeParams);
                 return $callback;
             }

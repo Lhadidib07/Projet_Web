@@ -46,10 +46,7 @@ class Request
     }
 
 
-    function validateCsrfToken($token)
-    {
 
-    }
    public function getBody()
     {
         // filter_input_array — Gets external variables and optionally filters them  preventing xss attacks
