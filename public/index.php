@@ -42,7 +42,7 @@ $app->router->get('/playGrid/{id}', [Controllers\GridController::class, 'playGri
 if(isset($_SESSION['user_id'])){
     $app->router->post('/logout', [AuthController::class, 'logout']);
 
-    if($_SESSION['user_role']!='admin'){
+    if($_SESSION['user_role']=='user'){
         $app->router->get('/grid/create', [Controllers\GridController::class, 'getForm']);
         $app->router->post('/grid/create', [Controllers\GridController::class, 'handleCreate']);
     }

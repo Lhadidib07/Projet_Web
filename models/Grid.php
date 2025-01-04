@@ -96,18 +96,17 @@ class Grid extends Model
         return empty($this->errors);
     }
 
-    function validateGridStructure($value): bool
+    public function validateGridStructure($gridData): bool
     {
-        $grid = json_decode($value, true);
+        $grid = json_decode($gridData, true);
         if (json_last_error() !== JSON_ERROR_NONE) {
             return false;
         }
-        if (!isset($grid['rows']) || !isset($grid['cols']) || !isset($grid['cells'])) {
+
+        if (!isset($grid['grid']) || !isset($grid['Enigmes']['Ligne']) || !isset($grid['Enigmes']['Colonnes'])) {
             return false;
         }
-        if (!is_numeric($grid['rows']) || !is_numeric($grid['cols']) || !is_array($grid['cells'])) {
-            return false;
-        }
+
         return true;
     }
 

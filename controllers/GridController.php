@@ -47,7 +47,7 @@ class GridController extends Controller
         return $this->render('grid/create', ['model' => $gridRepository]);
     }
 
-    public function handleCreate(): void
+    public function handleCreate(Request $request): void
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             http_response_code(405);
@@ -56,7 +56,7 @@ class GridController extends Controller
         }
 
         $input = file_get_contents('php://input');
-        $data = json_decode($input, associative: true);
+        $data = json_decode($input, true);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
             http_response_code(400);
@@ -77,7 +77,7 @@ class GridController extends Controller
         $gridData = $data['gridData'] ?? null;
 
         if (!$title || !$description || !$row_size || !$col_size || !$gridData) {
-            http_response_code(403);
+            http_response_code(400);
             echo json_encode(['message' => 'All fields are required']);
             return;
         }
@@ -89,24 +89,23 @@ class GridController extends Controller
         $gridRepository->description = $description;
         $gridRepository->row_size = $row_size;
         $gridRepository->col_size = $col_size;
-        $gridRepository->grid_data = $gridData;
-
-        if($gridRepository->user_id == null || $gridRepository->title == null || $gridRepository->description == null || $gridRepository->row_size == null || $gridRepository->col_size == null || $gridRepository->grid_data == null){
-            http_response_code(200);
-            echo json_encode(['message' => 'tous les champs sont requis']);
-            return;
-        }
+        $gridRepository->grid_data = json_encode($gridData); // Ensure grid_data is a JSON string
 
         try {
-            if($gridRepository->validate()){ 
+            if ($gridRepository->validate()) {
                 $gridRepository->create();
+                http_response_code(201);
                 echo json_encode(['message' => 'Grid created successfully']);
+            } else {
+                http_response_code(206);
+                echo json_encode(['message' => 'Validation failed', 'object' => $gridRepository->errors]);
             }
         } catch (Exception $e) {
-            http_response_code(200);
-            echo json_encode(['message' => $e->getMessage()]);
+            http_response_code(500);
+            echo json_encode(['message' => 'Internal server error', 'error' => $e->getMessage()]);
         }
     }
+
     public function deleteGrid(Request $request): void
     {
         header('Content-Type: application/json'); // Ensure the response is JSON

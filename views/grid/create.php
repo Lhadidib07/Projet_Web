@@ -307,7 +307,6 @@
                 return response.json();
             })
             .then(data => {
-                console.log('Success:', data);
                 showNotification(data.message);
                 setTimeout(() => {
                     window.location.href = '/grids';
