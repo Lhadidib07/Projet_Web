@@ -14,6 +14,14 @@ require_once __DIR__ . '/../models/User.php';
 
 class UserController extends Controller
 {
+
+    public function csrfVerification(Request $request): void
+    {
+        if ($request->getBody()['csrf_token'] !== $_SESSION['csrf_token']) {
+            echo json_encode(['status' => 'error', 'message' => 'Invalid CSRF token']);
+            exit;
+        }
+    }
     public function getUsers(): void
     {
         $user = new User();
@@ -23,6 +31,8 @@ class UserController extends Controller
 
     public function addUser(Request $request): void
     {
+        $this->csrfVerification($request);
+
         $userData = new User();
         // il faut validé les données avant de les envoyer à la base de données
         $userData->loadData($request->getBody());
@@ -41,6 +51,8 @@ class UserController extends Controller
   
     public function deleteUser(Request $request)
     {
+        $this->csrfVerification($request);
+        
         $user = new User();
         $user->id = $request->getBody()['id'];
         
