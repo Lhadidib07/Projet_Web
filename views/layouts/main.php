@@ -11,7 +11,7 @@
 </head>
 <body >
 <header class="navbar">
-    <div class="logo">los Gridos</div>
+    <div class="logo">MyLogo</div>
     <nav class="nav-links" id="navLinks">
         <ul>
             <li><a href="/">Home</a></li>
