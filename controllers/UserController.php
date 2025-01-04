@@ -15,13 +15,6 @@ require_once __DIR__ . '/../models/User.php';
 class UserController extends Controller
 {
 
-    public function csrfVerification(Request $request): void
-    {
-        if ($request->getBody()['csrf_token'] !== $_SESSION['csrf_token']) {
-            echo json_encode(['status' => 'error', 'message' => 'Invalid CSRF token']);
-            exit;
-        }
-    }
     public function getUsers(): void
     {
         $user = new User();
@@ -39,7 +32,7 @@ class UserController extends Controller
         $userData->loadData($request->getBody());
 
         // Vérifier si l'utilisateur existe déjà
-        if ($userData->getUserByMail($userData->email)) {
+        if ($userData->getUserByMail()) {
             echo json_encode(['status' => 'error', 'message' => 'L\'utilisateur existe déjà']);
             return;
         }
@@ -61,13 +54,13 @@ class UserController extends Controller
   
     public function deleteUser(Request $request)
     {
-        $this->csrfVerification($request);
+        $this->csrfVerification(request: $request);
         
         $user = new User();
         $user->id = $request->getBody()['id'];
         
         if ($user->deleteUser()) {
-            echo json_encode(['status' => 'success', 'id' => $user->id , 'message' => 'User deleted successfully']);
+            echo json_encode(['status' => 'success', 'id' => $user->id , 'message' => 'User suprimmé avec succées ']);
         } else {
             echo json_encode(['status' => 'error', 'message' => 'Failed to delete user']);
         }

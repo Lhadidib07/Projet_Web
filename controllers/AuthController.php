@@ -36,22 +36,22 @@ class AuthController extends Controller
                 // End the script to avoid any additional output
                 exit;
             } else {
-                // Destroy the session
-                session_unset();
-                session_destroy();
+        // Destroy the session
+        session_unset();
+        session_destroy();
 
-                // Header to indicate that the response is JSON
-                header('Content-Type: application/json');
+        // Header to indicate that the response is JSON
+        header('Content-Type: application/json');
 
-                // Return a clean JSON response
-                echo json_encode([
-                    'status' => 'success',
-                    'message' => 'Logout successful',
-                ]);
+        // Return a clean JSON response
+        echo json_encode([
+            'status' => 'success',
+            'message' => 'Logout successful',
+        ]);
 
-                // End the script to avoid any additional output
-                exit;
-            }
+        // End the script to avoid any additional output
+        exit;
+    }
         } catch (\Exception $e) {
             // Header to indicate that the response is JSON
             header('Content-Type: application/json');
@@ -68,7 +68,6 @@ class AuthController extends Controller
     }
     public function handlelogin(Request $request)
     {
-
 
         $userData = new User();
         $userData->loadData($request->getBody());
@@ -93,15 +92,24 @@ class AuthController extends Controller
 
     public function handleRegister(Request $request)
     {
+        
+
         $userData = new User();
-        // il faut validé les données avant de les envoyer à la base de données
         $userData->loadData($request->getBody());
+
+        // Vérifier si l'utilisateur existe déjà
+        if ($userData->getUserByMail()) {
+            echo json_encode(['status' => 'error', 'message' => 'L\'utilisateur existe déjà']);
+            return;
+        }
+
+        // il faut validé les données avant de les envoyer à la base de données
         if ( $userData->validate() && $userData->register() ) {
-            //echo 'Success';
-            return  $this->render('');
+            echo json_encode(['status' => 'success', 'message' => 'Inscription validé']);
+
         }else{
-            //echo 'Failed';
-            return $this->render('register', ['model' => $userData]);
+            echo json_encode(['status' => 'error', 'message' => 'Veuillez essayez à nouveau']);
+
         }
 
     }

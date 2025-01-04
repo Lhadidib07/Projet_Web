@@ -17,16 +17,4 @@ class SiteController extends Controller
         $this->render('home');
     }
 
-    public function contact(): void
-    {
-
-        Application::$app->router->renderView('contact');
-    }
-
-    public function handleContact(Request $request): void
-    {
-        $body = $request->getBody();
-
-            
-    }
 }

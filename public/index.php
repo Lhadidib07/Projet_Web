@@ -19,9 +19,6 @@ $app = new Application(dirname(__DIR__));
 
 //static routes
 $app->router->get('/',[Controllers\SiteController::class, 'home']);
-$app->router->get('/contact',[Controllers\SiteController::class, 'contact']);
-$app->router->post('/contact', [Controllers\SiteController::class, 'handleContact']);
-
 
 
 // authentification
