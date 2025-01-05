@@ -1,7 +1,10 @@
 <?php
 if (isset($grid)) {
-    // Extraire et décoder les données JSON de `grid_data`
-    $gridData = json_decode($grid['grid_data'], true); // Décodage en tableau associatif
+    $jsonString = trim($grid['grid_data'], '"');
+    $jsonString = stripslashes($jsonString);
+    $gridData = json_decode($jsonString, true);
+
+    
     // Vérifier si les données sont valides
     if ($gridData && isset($gridData['grid']) && isset($gridData['Enigmes'])) {
         // Extraire les informations nécessaires

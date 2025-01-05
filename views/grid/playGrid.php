@@ -1,7 +1,10 @@
 <?php
 if (isset($grid)) {
     // Extraire et décoder les données JSON de `grid_data`
-    $gridData = json_decode($grid['grid_data'], true); // Décodage en tableau associatif
+    $jsonString = trim($grid['grid_data'], '"');
+    $jsonString = stripslashes($jsonString);
+    $gridData = json_decode($jsonString, true);
+    //echo var_dump($grid['grid_data']);
 
     // Vérifier si les données sont valides
     if ($gridData && isset($gridData['grid']) && isset($gridData['Enigmes'])) {
@@ -135,7 +138,15 @@ if (isset($grid)) {
 
 <?php endif; ?>
 <script>
-
+    function resetGrid() {
+        const gridItems = document.querySelectorAll('.grid-item');
+        gridItems.forEach((gridItem) => {
+            const input = gridItem.querySelector('input');
+            if (input) {
+                input.value = '';
+            }
+        });
+    }
     function checkGrid() {
         const gridItems = document.querySelectorAll('.grid-item');
         let isGridValid = true;
@@ -184,7 +195,6 @@ if (isset($grid)) {
     function handleKeyDown(event) {
         const id = event.target.id;
         const [_, row, col] = id.split('-').map(Number);
-        console.log(row, col, event.key);
     
         function focusCell(newRow, newCol) {
             document.getElementById(`cell-${newRow}-${newCol}`).focus();
