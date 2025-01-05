@@ -21,7 +21,7 @@ class m01_initial
          // Insérer un utilisateur avec le rôle d'administrateur
          $username = 'admin';
          $email = 'admin@gmail.com'; 
-         $password = password_hash('admin_password', PASSWORD_BCRYPT); // Assurez-vous de hacher le mot de passe
+         $password = password_hash('adminpassword', PASSWORD_BCRYPT); // Assurez-vous de hacher le mot de passe
          $role = 'admin';
  
          $sql = "INSERT INTO users (email,name,password, role) VALUES (:email,:name, :password, :role)";
